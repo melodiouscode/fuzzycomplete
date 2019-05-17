@@ -1,8 +1,8 @@
 .fuzzyResults {
   position:absolute;
-  display: none;
   border: 1px solid #ccc;
   background: #FFF;
+  width:80%;
 }
 
 .__autoitem {

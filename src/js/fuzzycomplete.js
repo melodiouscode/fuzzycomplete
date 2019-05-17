@@ -14,6 +14,10 @@
 
     return this.each(function() {
 
+		if(jsonData === undefined){
+			jsonData = $(this).data("fuzzy-json");
+		}
+
       // Default options: search all keys, display and output the first one
       if(typeof options === 'undefined') {
         options = {
@@ -32,22 +36,14 @@
       var searchBox = $(this);
       var resultsBox = $('<div>').addClass('fuzzyResults');
       searchBox.after(resultsBox);
-      var selectBox = $('<select>').hide();
+      var selectBox = $('<select>');
+		selectBox.addClass("d-none");
 
       if (options.allowFreeInput !== true) {
         selectBox.attr('name', searchBox.attr('name'));
         searchBox.removeAttr('name');
       }
-      searchBox.after(selectBox);
-
-      var pos = searchBox.position();
-      pos.left += parseInt(searchBox.css('marginLeft'), 10);
-      pos.top += parseInt(searchBox.css('marginTop'), 10);
-      resultsBox.css({
-        'left': pos.left,
-        'top': pos.top + searchBox.outerHeight(),
-        'width': searchBox.outerWidth()
-      });
+      searchBox.after(selectBox);  
 
       function selectCurrent() {
         selectBox.val(resultsBox.children('.selected').first().data('id'));
@@ -61,11 +57,11 @@
         switch(e.which) {
           case 13: // Enter
             e.preventDefault();
-            resultsBox.hide();
+            resultsBox.addClass("d-none");
             selectCurrent();
             return;
           case 9: // Tab
-            resultsBox.hide();
+            resultsBox.addClass("d-none");
             selectCurrent();
             return;
         }
@@ -128,7 +124,7 @@
                                resultsBox.find('.selected').removeClass('selected');
                                $(this).addClass('selected');
                                selectCurrent();
-                               resultsBox.hide();
+                               resultsBox.addClass("d-none");
                              });
 
           if (typeof options.key === 'function') {
@@ -158,20 +154,20 @@
         });
 
         if(resultsBox.children().length) {
-          resultsBox.show();
+          resultsBox.removeClass("d-none");
           resultsBox.children().first().addClass('selected');
         } else {
-          resultsBox.hide();
+          resultsBox.addClass("d-none");
         }
       });
 
       searchBox.blur(function() {
-        resultsBox.hide();
+        resultsBox.addClass("d-none");
       });
 
       searchBox.focus(function() {
         if(resultsBox.children().length) {
-          resultsBox.show();
+          resultsBox.removeClass("d-none");
         }
       });
 
